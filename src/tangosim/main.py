@@ -14,7 +14,7 @@ def main() -> None:
     print(f"Score is {scores}")
 
     board_representation = game_state.get_human_readable_state()
-    print("\nFinal board state:")
+    print("\nFinal board state:") # Use double backslash for newline in the string literal
     print(board_representation)
 
 if __name__ == "__main__":
