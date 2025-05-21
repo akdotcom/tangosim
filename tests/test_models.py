@@ -238,3 +238,37 @@ def test_properly_detected_enclosure() -> None:
         game_state.place_tile(
             Tile([True, True, True, True, True, True], 0), 
             (1,0))
+
+def test_get_human_readable_state_empty_board() -> None:
+    game_state = GameState()
+    assert game_state.get_human_readable_state() == "Empty board"
+
+def test_get_human_readable_state_after_placing_tiles() -> None:
+    game_state = GameState(num_players=2)
+
+    # Tile 1 (color 0) at (0,0)
+    # Pattern: All sides True
+    tile1 = Tile(pattern=[True, True, True, True, True, True], color=0)
+    game_state.place_tile(tile1, (0,0))
+
+    # Tile 2 (color 1) at (0,-1)
+    # This position is a neighbor of (0,0) at index 0.
+    # tile1.pattern[0] is True.
+    # So, tile2.pattern[get_marker_idx(0)] which is tile2.pattern[3] must be True.
+    tile2 = Tile(pattern=[False, False, False, True, False, False], color=1)
+    game_state.place_tile(tile2, (0,-1))
+
+    human_readable_state = game_state.get_human_readable_state()
+
+    assert human_readable_state != "Empty board"
+    assert str(tile1.color) in human_readable_state
+    assert str(tile2.color) in human_readable_state
+
+    # Expected output based on (0,0) and (0,-1)
+    # min_q=0, max_q=0, min_r=-1, max_r=0
+    # num_rows = 0 - (-1) + 1 = 2
+    # num_cols = 0 - 0 + 1 = 1
+    # grid[0][0] for (0,-1) -> color 1
+    # grid[1][0] for (0,0)  -> color 0
+    expected_state = "1\n0"
+    assert human_readable_state == expected_state

@@ -241,6 +241,30 @@ class GameState:
             score += max_pop_score
         return score
     
+    def get_human_readable_state(self) -> str:
+        if not self.tiles:
+            return "Empty board"
+
+        # Determine board bounds from tile coordinates
+        min_q = min(pos[0] for pos in self.tiles.keys())
+        max_q = max(pos[0] for pos in self.tiles.keys())
+        min_r = min(pos[1] for pos in self.tiles.keys())
+        max_r = max(pos[1] for pos in self.tiles.keys())
+
+        # Create an empty grid
+        num_rows = max_r - min_r + 1
+        num_cols = max_q - min_q + 1
+        grid = [['.' for _ in range(num_cols)] for _ in range(num_rows)]
+
+        # Populate the grid with tile colors
+        for (q, r), tile in self.tiles.items():
+            row = r - min_r
+            col = q - min_q
+            grid[row][col] = str(tile.color)
+
+        # Convert grid to string
+        return "\n".join([" ".join(row) for row in grid])
+
     def check_and_score_pops(self, tile:Tile, position:Tuple[int, int]) -> List[Tuple[Tuple[int, int], int]]:
         """Returns a list of (location, score) for pops that could happen if placing 
            tile at position

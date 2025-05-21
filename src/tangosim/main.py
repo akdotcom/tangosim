@@ -13,5 +13,9 @@ def main() -> None:
     scores = game_state.get_scores()
     print(f"Score is {scores}")
 
+    board_representation = game_state.get_human_readable_state()
+    print("\nFinal board state:")
+    print(board_representation)
+
 if __name__ == "__main__":
     main()
